@@ -1,0 +1,131 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Talk Doc</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link rel="stylesheet" href="/static/css/generic/bootstrap.min.css"/>
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="/static/css/generic/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="/static/css/generic/font-awesome.min.css"/>
+
+        <link rel="stylesheet" href="/static/css/generic/jquery-ui.css"/>
+        <link rel="stylesheet" href="/static/css/generic/responsive-calendar.css"/>
+        <link rel="stylesheet" href="/static/css/generic/style.css"/>
+        <link rel="stylesheet" href="/static/css/generic/tinycarousel.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="/static/css/generic/star-rating.min.css"/>
+        <!--Date Time Picker CSS-->
+        <link rel="stylesheet" href="/static/css/generic/bootstrap-datetimepicker.min.css"/>
+        <!--Scripts -->
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.tinycarousel.js" type="text/javascript"></script>
+        <script src="/static/js/jquery-ui.js" type="text/javascript"></script>
+        <script src="/static/js/responsive-calendar.min.js" type="text/javascript"></script>
+        <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+        <script src="/static/js/select2-krajee.min.js" type="text/javascript"></script>
+        <script src="/static/js/star-rating.min.js" type="text/javascript"></script>
+        <!--Scripts For DateTime Picker and willness Check-->
+        <script src="/static/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+        <script src="/static/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+        <script src="/static/js/jquery-asPieProgress.js"></script>
+    </head>
+<body>
+<div class="page-header">
+    <div class="logo">
+        <a class="navbar-brand" href="#"><img src="/static/css/images/logo.png"/></a>
+    </div>
+    <ul class="nav pull-right top-menu navbar-right nav-down">
+        <!-- user login dropdown start-->
+        <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle nav-btn-border" href="#">
+                <i class="fa fa-bars"></i>
+                </a>
+                 <span class="username">Welcome {{user.user.first_name}}</span>
+            <ul class="dropdown-menu extended logout drop-profile">
+                <div class="log-arrow-up"></div>
+                <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                <li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>
+                <li><a href="/logout/"><i class="fa fa-key"></i> Log Out</a></li>
+            </ul>
+        </li>
+    <!-- user login dropdown end -->
+    </ul>
+    <img class="shadow_img" src="/static/css/images/nav_shadow.png"/>
+    <nav class="navbar navbar-default nav-margin nav-wide">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse nav_color">
+                <ul class="nav navbar-nav main-nav-down">
+                    {% ifequal user.user_type.user_type 'Patient'%}
+                        <li><img src="/static/css/images/home.png"/><a href="/talkdoc/home">Home</a></li>
+                    {% endifequal%}
+                    <li><img src="/static/css/images/clock.png"/><a href="/talkdoc/appointments_reviews">Appointments & Reviews	</a></li>
+                    <li><img src="/static/css/images/prof.png"/><a href="{%url 'edit_profile'%}">Profile</a></li>
+                    {% ifequal user.user_type.user_type "Patient"%}
+                        <li><img src="/static/css/images/pat_record.png"/><a href="#">Add Medical History</a></li>
+                    {% else %}
+                        <li><img src="/static/css/images/pat_record.png"/><a href="{%url 'main_search' 'Patient'%}">Patient Records</a></li>
+                        <li><img src="/static/css/images/pat_record.png"/><a href="{%url 'availability_settings'%}">Practice Management</a></li>
+                    {% endifequal%}
+
+                    <!--<li><img src="/static/css/images/payment.png"/><a href="#">Payments</a></li>-->
+                     <!--<li><img src="/static/css/images/comment.png"/><a href="#">Communicate</a></li>-->
+                </ul>
+            </div>
+
+            <!--<div id="navbar" class="navbar-collapse collapse nav_color">-->
+                <!--<ul class="nav navbar-nav main-nav-down">-->
+                    <!--<li><i class="fa fa-users"></i><a href="/talkdoc/home">Home</a></li>-->
+                    <!--<li><i class="fa fa-clock-o"></i><a href="#">Appointments & Reviews	</a></li>-->
+                    <!--<li><i class="fa fa-cog"></i><a href="/talkdoc/editProfile">Edit Profile</a></li>-->
+                    <!--<li><i class="fa fa-hospital-o"></i><a href="#">Add Medical History</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+      </nav>
+</div>
+
+<!--<div class="nav-two">-->
+        <!--<ul>-->
+            <!--<li></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+    {% block content %}
+
+    {% endblock %}
+
+<footer id="footer">
+    <div class="wrapper">
+
+      <ul class="navi">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+		<li><a href="#">Blog</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy &amp; Terms</a></li>
+      </ul>
+    <ul class="social">
+        <li><a href="#"><img src="/static/css/images/fb.png" /></a></li>
+        <li><a href="#"><img src="/static/css/images/tw.png" /></a></li>
+        <li><a href="#"><img src="/static/css/images/g+.png" /></a></li>
+      </ul>
+	</div>
+  </footer>
+{% block extra_body %}{% endblock %}
+</body>
+</html>

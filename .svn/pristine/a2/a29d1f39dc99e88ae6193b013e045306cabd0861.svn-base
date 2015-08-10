@@ -1,0 +1,22 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+    <div class="wrapper">
+        <div class="content-6">
+            {% ifequal searched_to.user_type.user_type "Doctor" %}
+                {% include "talkdoc/viewDocProfile.html" %}
+             {% else %}
+                {% include "talkdoc/viewPatientProfile.html" %}
+            {% endifequal %}
+	    </div>
+	  </div>
+
+{% endblock %}
+{% block extra_body %}
+<script>
+		$(document).ready(function(){
+
+		    $('#myTable').dataTable();
+		    $(".responsive-calendar").responsiveCalendar('curr');
+		});
+</script>
+{% endblock %}

@@ -1,0 +1,269 @@
+from django.contrib.auth.decorators import login_required
+from django.core.checks import messages
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.template import RequestContext
+import simplejson as simplejson
+from django.db.models import Count, Q
+from django.core.urlresolvers import reverse
+from datetime import datetime, timedelta
+
+from TalkDoc.forms import *
+
+from TalkDoc.models import *
+from login.models import *
+
+
+#Home
+@login_required
+def home(request):
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    return render_to_response('talkdoc/home.html', {'user': user, })
+
+
+
+@login_required
+def edit_profile(request):
+
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        user_profile = ''
+
+    if request.method == 'POST':
+        if user_profile:
+            form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        else:
+            form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            userProfile = form.save(commit=False)
+            userProfile.user = request.user
+            userProfile.save()
+            form.save_m2m()
+
+            user_profile = userProfile
+            print user.user_type.user_type
+            if user.user_type.user_type == 'Doctor':
+                return HttpResponseRedirect(reverse('availability_settings'))
+
+    else:
+        if user_profile:
+            form = UserProfileForm(instance=user_profile)
+        else:
+            form = UserProfileForm()
+
+    return render_to_response('talkdoc/editProfile.html', {'form': form, 'user': user,'user_profile':user_profile},
+                              context_instance=RequestContext(request))
+
+
+#User Profile
+@login_required
+def user_profile(request):
+    return render_to_response('talkdoc/userProfile.html', {'user': request.user, }, context_instance=RequestContext(request))
+
+
+#Main Search
+@login_required
+def main_search(request, u_type=None):
+    user_list = []
+    q_objs = []
+    searched_users = ''
+
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    user_list = get_user_list(u_type)
+    specialities = Speciality.objects.all()
+    services = ServiceOffered.objects.all()
+    cities = City.objects.all()
+
+    user_name = request.GET.get("user_name", "")
+    specialilty = request.GET.get("specialilty", "")
+    city = request.GET.get("city", "")
+
+    if user_name:
+        q_objs.append(Q(first_name=user_name))
+    if specialilty:
+        q_objs.append(Q(speciality__id=specialilty))
+    if city:
+        q_objs.append(Q(city__id=city))
+
+    if q_objs:
+        searched_users = UserProfile.objects.filter(*q_objs)
+
+    return render_to_response('talkdoc/searchResults.html',
+                              {
+                                  'user': user,
+                                  'user_type': u_type,
+                                  'user_list': simplejson.dumps(user_list),
+                                  'specialities': specialities,
+                                  'services': services,
+                                  'cities': cities,
+                                  'searched_users': searched_users,
+                               }, context_instance=RequestContext(request))
+
+
+# #Search Results
+# @login_required
+# def search_results(request, u_type=None):
+#     q_objs = []
+#     searched_users = ''
+#
+#     try:
+#         user = UserExtended.objects.get(user=request.user)
+#     except UserExtended.DoesNotExist:
+#         messages.error(request, "User does not exist.")
+#
+#     user_list = get_user_list(u_type)
+#
+#
+#     user_name = request.GET.get("user_name", "")
+#     if user_name:
+#         q_objs.append(Q(first_name=user_name))
+#
+#     if q_objs:
+#         searched_users = UserProfile.objects.filter(*q_objs)
+#
+#     return render_to_response('talkdoc/searchResults.html',
+#                               {
+#                                   'user': user,
+#                                   'user_type': u_type,
+#                                   'user_list': simplejson.dumps(user_list),
+#                                   'searched_users':searched_users,
+#                                })
+
+
+
+#Availablility Settings
+@login_required
+def availability_settings(request, id=None):
+    avail_id=0
+
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    try:
+        profile_obj = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        pass
+
+    if request.method == 'POST':
+        try:
+            obj = Availability.objects.get(id=id)
+            form = AvailabilitySettingsForm(request.POST, request.FILES, instance=obj)
+        except Availability.DoesNotExist:
+            form = AvailabilitySettingsForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            userProfile = form.save(commit=False)
+            userProfile.profile = profile_obj
+            userProfile.save()
+
+            form = AvailabilitySettingsForm()
+    else:
+        try:
+            obj = Availability.objects.get(id=id)
+            avail_id = obj.id
+            form = AvailabilitySettingsForm(instance=obj)
+        except Availability.DoesNotExist:
+            form = AvailabilitySettingsForm()
+
+    availability_list = Availability.objects.filter(profile=profile_obj, date_deleted__isnull=True)
+
+    return render_to_response('talkdoc/availabilitySettings.html',
+                              {
+                                  'form': form,
+                                  'user': user,
+                                  'profile_obj':profile_obj,
+                                  'availability_list': availability_list,
+                                  'avail_id': avail_id
+                               })
+
+
+#View Profile
+@login_required
+def view_profile(request, u_type=None):
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    try:
+        searched_by = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        pass
+
+    try:
+        searched_user = UserExtended.objects.get(user_type__user_type=u_type)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    try:
+        profile_obj = UserProfile.objects.get(user=searched_user.user)
+    except UserProfile.DoesNotExist:
+        pass
+
+    return render_to_response('talkdoc/viewProfile.html',
+                              {
+                                  'user': user,
+                                  'profile_obj':profile_obj,
+                                  'seached_by': searched_by,
+                                  'seached_to': searched_user,
+                               }, context_instance=RequestContext(request))
+
+
+#Delete Settings
+@login_required
+def delete_settings(request, id):
+    print id
+    try:
+        obj = Availability.objects.get(id=id, date_deleted__isnull=True)
+        obj.date_deleted = datetime.today()
+        obj.save()
+    except Availability.DoesNotExist:
+        messages.success(request, "Tool does not exist.")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+#Private Methods
+def get_user_list(u_type):
+    user_list = []
+
+    users = UserExtended.objects.filter(user_type__user_type=u_type)
+
+    for u in users:
+        try:
+            obj = UserProfile.objects.get(user=u.user)
+            if obj.first_name not in user_list:
+                user_list.append(str(obj.first_name))
+        except UserProfile.DoesNotExist:
+            pass
+
+    return user_list
+
+
+@login_required
+def appointments_reviews(request):
+    try:
+        user = UserExtended.objects.get(user=request.user)
+    except UserExtended.DoesNotExist:
+        messages.error(request, "User does not exist.")
+
+    return render_to_response('talkdoc/appointments_reviews.html', {'user': user, })

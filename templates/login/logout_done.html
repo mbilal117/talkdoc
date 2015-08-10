@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/JavaScript">
+<!--
+setTimeout("location.href = '{{ log_in }}';", 1000);
+-->
+</script>
+
+<h1>Thanks for visiting!</h1>
+<p>You are now logged out.  You will be redirected to the <a href='{{ log_in }}'>login page</a>.</p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<div class="nav-three">
+    <ul>
+        <li class="nav_arrow selected">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span><a href="#" >Profile</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+        </li>
+        <li class="nav_arrow">
+            <i class="fa fa-cog"></i><a href="#">Notifications</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+        </li>
+    </ul>
+</div>
+    <div class="content">
+        <div class="edit_cont">
+            <a href="{%url 'edit_profile'%}" class="btn btn-default edit_profile">Edit Profile</a>
+        </div>
+        {% ifequal user.user_type.user_type "Doctor" %}
+            {% include "talkdoc/viewDocProfile.html" %}
+        {% else %}
+            {% include "talkdoc/patientProfile.html" %}
+        {% endifequal %}
+    </div>
+{% endblock %}

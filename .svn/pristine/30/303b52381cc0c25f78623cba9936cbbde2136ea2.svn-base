@@ -1,0 +1,158 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<section class="content">
+    <div class="table-responsive visible-xs-*">
+        <form enctype="multipart/form-data" id="main_search" action="{% url 'main_search' user_type %}" method="get" >{% csrf_token %}
+            <div class="row">
+                <!-- /.col 3 end -->
+                <div class="col-md-12">
+                    <h2>Search For {{user_type}}</h2>
+                    <div class="col-md-2" style="padding: 2px;">
+                        <input class="form-control custom_select" type="text" id="user_name" name="user_name" placeholder="Enter Name">
+                    </div>
+                    {%ifequal user_type "Doctor" %}
+                        <div class="col-md-2" style="padding: 2px;">
+                            <select class="form-control custom_select" id="specialilty" name="specialilty">
+                                 <option value="" selected="selected">Select Speciality</option>
+                            {% for x in specialities %}
+                                <option value="{{x.id}}">{{x.speciality_name}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="padding: 2px;">
+                            <select class="form-control custom_select" id="hospital" name="hospital">
+                                 <option value="" selected="selected">Select Hospital</option>
+                            {% for x in hospital_list %}
+                                <option value="{{x.id}}">{{x}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="padding: 2px;">
+                            <select class="form-control custom_select" id="city" name="city">
+                                 <option value="" selected="selected">Select City</option>
+                            {% for x in cities %}
+                                <option value="{{x.id}}">{{x}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="padding: 2px;">
+                            <select class="form-control custom_select" id="rating" name="rating">
+                                <option value="" selected="selected">Select Rating</option>
+                                <option value="1" >1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <!--<div class="col-md-2" style="padding: 2px;">-->
+                            <!--<select class="form-control custom_select" id="education" name="education">-->
+                                 <!--<option value="" selected="selected">Select Education</option>-->
+                            <!--{% for x in profile_obj.services_offerd.all %}-->
+                                <!--<option value="{{x.id}}">{{x}}</option>-->
+                            <!--{% endfor %}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    {% else %}
+                        <div class="col-md-2" style="padding: 2px;">
+                            <select class="form-control custom_select" id="visitType" name="visitType">
+                                 <option value="" selected="selected">Reason for visit</option>
+                            {% for x in services %}
+                                <option value="{{x.id}}">{{x}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    {% endifequal %}
+                    <div class="col-md-1" style="float:right;">
+                        <button ><img src="/static/css/images/search.png"/></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if searched_users %}
+    <img class="shadow_img" src="/static/css/images/nav_shadow.png"/>
+    <div id="slider1">
+		<a class="buttons prev" href="#">&#60;</a>
+		<div class="viewport">
+			<ul class="overview">
+                {% for obj in searched_users %}
+				<li>
+                    <div class="dr_prof">
+                        {% if obj.picture%}
+                            <img src="{{ STATIC_ROOT }}{{obj.picture.url}}" width="100" height="104"/>
+                        {% else %}
+                            <img src="/static/css/images/pic.png"/>
+                        {% endif %}
+                        <h1>{{obj.first_name}} {{obj.last_name}}</h1>
+                        <h4>{{obj.speciality}}</h4>
+                        <div class="address">
+                            <img src="/static/css/images/location.png"/>
+                            <span>{{obj.address}}</span>
+                            <!--<br/>-->
+                            <!--<span>Thokar Niaz Baig Lahore</span>-->
+                        </div>
+                        <p>{% for x in obj.services_offerd.all %}{{x}}, {% endfor %}</p>
+                        <a href="{% url 'view_profile' obj.id user_type %}" class="btn btn-primary view_profile">View Profile</a>
+                        <a href="{% url 'book_now' obj.id %}" class="btn btn-primary book_now">Book Now</a>
+                    </div>
+                </li>
+				{% endfor %}
+			</ul>
+		</div>
+		<a class="buttons next" href="#">&#62;</a>
+	</div>
+    <!--<div id="slider1">-->
+        <!--<a class="buttons prev" href="#">&#60;</a>-->
+        <!--<div class="viewport">-->
+            <!--<ul class="overview">-->
+                <!--<img class="shadow_img" src="/static/css/images/nav_shadow.png"/>-->
+                <!--{% for obj in searched_users %}-->
+                <!--<div class="dr_prof">-->
+                    <!--<img src="/static/css/images/pic.png"/>-->
+                    <!--<h1>{{obj.first_name}} {{obj.last_name}}</h1>-->
+                    <!--<h4>{{obj.speciality}}</h4>-->
+                    <!--<div class="address">-->
+                        <!--<img src="/static/css/images/location.png"/>-->
+                        <!--<span>{{obj.address}}</span>-->
+                        <!--&lt;!&ndash;<br/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span>Thokar Niaz Baig Lahore</span>&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<p>{% for x in obj.services_offerd.all %}{{x}}, {% endfor %}</p>-->
+                    <!--<button type="button" class="btn btn-default view_profile">View Profile</button>-->
+                    <!--<button type="button" class="btn btn-default book_now">Book Now</button>-->
+                <!--</div>-->
+                <!--{% endfor %}-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<a class="buttons next" href="#">&#62;</a>-->
+    <!--</div>-->
+{% else%}
+<p class="lead"><small><small></p>
+{% endif %}
+</section>
+
+
+{% endblock %}
+{% block extra_body %}
+<script type="text/javascript">
+  $(function() {
+        $('#slider1').tinycarousel();
+
+        var myDjangoList = (("{{user_list}}").replace(/&(l|g|quo)t;/g, function(a,b){
+                    return {
+                        l   : '<',
+                        g   : '>',
+                        quo : '"'
+                    }[b];
+                }));
+        myDjangoList = myDjangoList.replace(/u'/g, '\'');
+        myDjangoList = myDjangoList.replace(/'/g, '\"');
+
+        myData = JSON.parse( myDjangoList );
+        $( "#user_name" ).autocomplete({
+        source: myData
+        });
+  });
+</script>
+{% endblock %}

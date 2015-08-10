@@ -1,0 +1,92 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+
+<section class="content" style="margin-top: 60px;">
+    <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">{% csrf_token %}
+        <div class="row">
+            <!-- /.col 3 end -->
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <label>First Name:</label>
+                    {{form.first_name}}
+                    {{form.first_name.errors}}
+                    <label>Sex</label>
+                    {{form.sex}}
+                    {{form.sex.errors}}
+                    <label>Blood Group</label>
+                    {{form.blood_group}}
+                    {{form.blood_group.errors}}
+                    <label>Marital Status</label>
+                    {{form.marital_status}}
+                    {{form.marital_status.errors}}
+                    <label>Medical Condition</label>
+                    {{form.medical_condition}}
+                    {{form.medical_condition.errors}}
+                    {%ifequal user.user_type.user_type "Doctor"%}
+                    <label>Services Offerd</label>
+                    {{form.services_offerd}}
+                    {{form.services_offerd.errors}}
+                    {% endifequal %}
+                </div>
+                <div class="col-md-4">
+                    <label>Last Name</label>
+                    {{form.last_name}}
+                    {{form.last_name.errors}}
+                    <label>City</label>
+                    {{form.city}}
+                    {{form.city.errors}}
+                    <label>Address</label>
+                    {{form.address}}
+                    {{form.address.errors}}
+                    <label>Education</label>
+                    {{form.education}}
+                    {{form.education.errors}}
+                    <label>Allergy</label>
+                    {{form.alergy}}
+                    {{form.alergy.errors}}
+                </div>
+                <div class="col-md-4">
+                    <label>Picture</label>
+                    {% if user_profile.picture %}
+                      Currently : <a href="{{ STATIC_ROOT }}{{user_profile.picture.url}}" >{{user.user.first_name}}</a>
+                    {% endif %}
+                    <input id="id_picture" name="picture" style="height: 33px;" type="file">
+                    <label>DOB</label>
+                    {{form.dob}}
+                    {{form.dob.errors}}
+                    <label>Cell Phone</label>
+                    {{form.cell_phone}}
+                    {{form.cell_phone.errors}}
+                    <label>Email</label>
+                    <input type="email" class="form-control uname_field" name="email" id="email"  value="{{request.user.email}}" placeholder="Enter Email">
+                    {%ifequal user.user_type.user_type "Doctor"%}
+                    <label>Speciality</label>
+                    {{form.speciality}}
+                    {{form.speciality.errors}}
+                    <br/>
+                    <div class="col-md-11" style="text-align:right;">
+                        <a href="{% url 'availability_settings' %}" class="btn btn-primary">Next</a>
+                    </div>
+                    {% else %}
+                    <br/>
+                    <div class="col-md-11" style="text-align:right;">
+                        <button class="btn btn-primary">Add Section</button>
+                    </div>
+                    {% endifequal %}
+                </div>
+            </div>
+        </div>
+
+    </form>
+</section>
+
+{% endblock %}
+{% block extra_body %}
+<script type="text/javascript">
+  $(function() {
+    $('#id_lob').datetimepicker({
+    format: 'yyyy-mm-dd hh:ii'   //set right mask
+});
+  });
+</script>
+{% endblock %}

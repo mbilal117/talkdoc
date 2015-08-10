@@ -1,0 +1,16 @@
+from django.conf.urls import url, patterns
+
+from . import views
+
+urlpatterns = patterns('TalkDoc.views',
+    url(r'^home/$', views.home, name='home'),
+    url(r'^editProfile/$', views.edit_profile, name='edit_profile'),
+    url(r'^user_profile/$', views.user_profile, name='user_profile'),
+    url(r'^search/$', views.main_search, name='main_search'),
+    url(r'^search/(?P<u_type>[-\w]+)/$', views.main_search, name='main_search'),
+    # url(r'^searchResults/(?P<u_type>[-\w]+)/$', views.search_results, name='search_results'),
+    url(r'^appointments_reviews/$', views.appointments_reviews, name='appointments_reviews'),
+    url(r'^settings/$', views.availability_settings, name='availability_settings'),
+    url(r'^settings/(?P<id>[-\w]+)/$', views.availability_settings, name='availability_settings'),
+    url(r'^profile/view/(?P<u_type>[-\w]+)/$', views.view_profile, name='view_profile'),
+   )

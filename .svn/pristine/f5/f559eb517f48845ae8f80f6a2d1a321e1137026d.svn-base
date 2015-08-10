@@ -1,0 +1,67 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<section class="content" style="margin-top: 10px;">
+    <div class="table-responsive visible-xs-*">
+        <form id="form" method="post" action="{% url 'availability_settings' avail_id %}" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <!-- /.col 3 end -->
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Start Date</label>
+                        {{form.start_date}}
+                        {{form.start_date.errors}}
+                        <label>Start Time</label>
+                        {{form.start_time}}
+                        {{form.start_time.errors}}
+                        <br/>
+                        {{form.is_saturday_off}}
+                        {{form.is_saturday_off.errors}}
+                        I am off on Saturday
+                        <br/>
+                        {{form.is_sunday_off}}
+                        {{form.is_sunday_off.errors}}
+                        I am off on Sunday
+                    </div>
+                    <div class="col-md-4">
+                        <label>End Date</label>
+                        {{form.end_date}}
+                        {{form.end_date.errors}}
+                        <label>End Time</label>
+                        {{form.end_time}}
+                        {{form.end_time.errors}}
+                        <br/>
+                        <button class="btn btn-primary" style="float:right;">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br/>
+     <div class="table-responsive visible-xs-*">
+        <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+            <thead>
+                <th class="col-md-2">Start Date</th>
+                <th class="col-md-2">End Date</th>
+                <th class="col-md-2">Start Time</th>
+                <th class="col-md-2">End Time</th>
+                <th class="col-md-1"></th>
+            </thead>
+            <tbody>
+            {% for x in availability_list %}
+                <tr>
+                    <td>{{x.start_date}}</td>
+                    <td>{{x.end_date}}</td>
+                    <td>{{x.start_time}}</td>
+                    <td>{{x.end_time}}</td>
+                    <td>
+                        <a href="{% url 'availability_settings' x.id %}"><i class="glyphicon glyphicon-edit" TITLE="Edit"></i></a>&nbsp;
+                        <a href="{% url 'delete_settings' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+

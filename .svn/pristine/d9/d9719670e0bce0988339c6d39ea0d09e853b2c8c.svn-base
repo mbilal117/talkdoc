@@ -1,0 +1,39 @@
+from django.forms import *
+from django import forms
+from django.contrib.auth.models import User
+
+from TalkDoc.models import UserType
+
+class LoginForm(Form):
+    username = CharField(max_length=75, required=True, label='Username:')
+    password = CharField(max_length=32, required=True, label='Password:')
+
+class UserField(forms.CharField):
+    def clean(self, value):
+        super(UserField, self).clean(value)
+        try:
+            User.objects.get(username=value)
+            raise forms.ValidationError("Username already exist.")
+        except User.DoesNotExist:
+            return value
+
+class SignupForm(forms.Form):
+    # first_name = forms.CharField(max_length=30)
+    user_type = forms.ModelChoiceField(queryset=UserType.objects.all())
+    username = UserField(max_length=30)
+    password = forms.CharField(widget=forms.PasswordInput())
+    password2 = forms.CharField(widget=forms.PasswordInput(), label="Repeat your password")
+    email = forms.EmailField()
+
+    def __init__(self, *args, **kwargs):
+		super(SignupForm, self).__init__(*args, **kwargs)# Call to ModelForm constructor
+                self.fields['user_type'].widget.attrs.update({'class': 'form-control pass_field'})
+
+    def clean_password(self):
+        if self.data['password'] != self.data['password2']:
+            raise forms.ValidationError('Passwords are not the same')
+        return self.data['password']
+
+    def clean(self,*args, **kwargs):
+        self.clean_password()
+        return super(SignupForm, self).clean(*args, **kwargs)

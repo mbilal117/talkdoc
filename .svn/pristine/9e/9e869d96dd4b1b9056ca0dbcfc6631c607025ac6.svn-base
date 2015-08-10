@@ -1,0 +1,155 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+    <div class="wrapper">
+        <div class="content-6">
+            <div class="patient">
+                <div class="pat_img">
+                    <img src="{{ STATIC_ROOT }}{{profile_obj.picture.url}}" width="100" height="104"/>
+                    </div>
+                    <div class="pat_detail">
+                        <h3>{{profile_obj.first_name}} </h3>
+                        <img src="/static/css/images/location.png"/>
+                        <span>{{profile_obj.city}}</span>
+                        <br/>
+                        <span>{{profile_obj.address}}</span>
+                        <button type="button" class="btn btn-default set_appointment">Set Appointment</button>
+                    </div>
+                </div>
+                <div class="pat_info">
+                    <h3>Info</h3>
+                    <div class="personal_info">
+                        <h5>Personal Information</h5>
+                        <div class="info_row">
+                            <img src="/static/css/images/sex.png"/>
+                            <label>Sex:</label>
+                            <span>{{profile_obj.sex}}</span>
+                        </div>
+                        <div class="info_row">
+                            <img src="/static/css/images/dob.png"/>
+                            <label>Date of Birth:</label>
+                            <span>{{profile_obj.dob}}</span>
+                        </div>
+                        <div class="info_row">
+                            <img src="/static/css/images/mob.png"/>
+                            <label>Mobile Number:</label>
+                            <span>{{profile_obj.cell_phone}}</span>
+                        </div>
+                        <div class="info_row">
+                            <img src="/static/css/images/email.png"/>
+                            <label>Email Address:</label>
+                            <span>{{seached_to.user.email}}</span>
+                        </div>
+                        <!--<div class="info_row">-->
+                            <!--<img src="/static/css/images/f.png"/>-->
+                            <!--<label>Facebook Link:</label>-->
+                            <!--<span>ali.ashraf101</span>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="medical_info">
+                        <h5>Medical Information</h5>
+                        <div class="info_row">
+                            <img src="/static/css/images/bg.png"/>
+                            <label>Blood Group:</label>
+                            <span>{{profile_obj.blood_group}}</span>
+                        </div>
+                        <div class="info_row">
+                            <img src="/static/css/images/mc.png"/>
+                            <label>Medical Conditions:</label>
+                            <span>{{profile_obj.medical_condition}}</span>
+                        </div>
+                        <div class="info_row">
+                            <img src="/static/css/images/allergy.png"/>
+                            <label>Allergies:</label>
+                            <span>{{profile_obj.alergy}}</span>
+                        </div>
+                        <!--<div class="info_row">-->
+                            <!--<img src="/static/css/images/eye.png"/>-->
+                            <!--<label>Eye Sight:</label>-->
+                            <!--<span>ali.ashraf101</span>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+	        <div class="pat_appointment container pat_review">
+			    <div class="responsive-calendar pat_calendar">
+		            <div class="controls">
+		                <a class="pull-left" data-go="prev"><div class="btn btn-primary">Prev</div></a>
+		                <h4><span data-head-year></span> <span data-head-month></span></h4>
+		                <a class="pull-right" data-go="next"><div class="btn btn-primary">Next</div></a>
+		            </div><hr/>
+		            <div class="day-headers">
+		                <div class="day header">Mon</div>
+		                <div class="day header">Tue</div>
+		                <div class="day header">Wed</div>
+		                <div class="day header">Thu</div>
+		                <div class="day header">Fri</div>
+		                <div class="day header">Sat</div>
+		                <div class="day header">Sun</div>
+		            </div>
+		            <div class="days" data-group="days">
+
+		            </div>
+		        </div>
+			    <div class="appointment_details">
+			        <div class="up-appoint">
+			            <h3>Upcoming Appointments</h3>
+			            <div class="review_appoint">
+			                <span>9:30 AM</span>
+			                <p>Leaving Party!!</p>
+			                <img src="/static/css/images/orange_bullet.png"/>
+			            </div>
+			            <h3>Today</h3>
+			            <div class="review_appoint">
+			                <span>9:30 AM</span>
+			                <p>Leaving Party!!</p>
+			                <img src="/static/css/images/orange_bullet.png"/>
+			            </div>
+			            <h3>Recent Past</h3>
+			            <div class="review_appoint">
+			                <span>9:30 AM</span>
+			                <p>Leaving Party!!</p>
+			                <img src="/static/css/images/orange_bullet.png"/>
+			            </div>
+			        </div>
+			    </div>
+  		    </div>
+            <div class="patient border-box">
+                <div class="overview">
+                    <img src="/static/css/images/v-o.png"/>
+                    <h3>Visit Overview</h3>
+                    <img src="{{ STATIC_ROOT }}{{seached_by.picture.url}}" width="100" height="104"/>
+                        <div class="pat_detail">
+                            <h4>Dr. {{seached_by.first_name}} {{seached_by.last_name}}</h4>
+                            <p>{{seached_by.speciality}}</p>
+                            <img src="/static/css/images/location.png"/>
+                            <span>{{seached_by.address}}</span>
+                        </div>
+                    </div>
+                    <div class="reason">
+                        <label>Reason for visit</label>
+                        <p>Skin allergy and pain </p>
+                    </div>
+                    <div class="attachments">
+                        <label>Attachments</label>
+                        <button type="button" class="btn btn-default test-btn">Tests</button>
+                        <button type="button" class="btn btn-default test-btn">Prescription</button>
+                    </div>
+                    <div class="summary">
+                        <h5>Summary</h5>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing s</p>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	  </div>
+
+{% endblock %}
+{% block extra_body %}
+<script>
+		$(document).ready(function(){
+
+		    $('#myTable').dataTable();
+		    $(".responsive-calendar").responsiveCalendar('curr');
+		});
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+from django.conf.urls import url, patterns
+
+from . import views
+
+urlpatterns = patterns('TalkDoc.views',
+    url(r'^home/$', views.home, name='home'),
+
+    #Profile
+    url(r'^editProfile/$', views.edit_profile, name='edit_profile'),
+    url(r'^user_profile/$', views.user_profile, name='user_profile'),
+    url(r'^profile/view/(?P<id>[-\w]+)/(?P<u_type>[-\w]+)/$', views.view_profile, name='view_profile'),
+
+
+    #Search
+    url(r'^search/$', views.main_search, name='main_search'),
+    url(r'^search/(?P<u_type>[-\w]+)/$', views.main_search, name='main_search'),
+    # url(r'^searchResults/(?P<u_type>[-\w]+)/$', views.search_results, name='search_results'),
+
+
+    #Appointments
+    url(r'^appointments_reviews/$', views.appointments_reviews, name='appointments_reviews'),
+
+
+    #Settings
+    url(r'^settings/$', views.availability_settings, name='availability_settings'),
+    url(r'^settings/(?P<id>[-\w]+)/$', views.availability_settings, name='availability_settings'),
+    url(r'^settings/delete/(?P<id>[-\w]+)/$', views.delete_settings, name='delete_settings'),
+    url(r'^services/settings/$', views.services_settings, name='services_settings'),
+    url(r'^services/settings/(?P<id>[-\w]+)/$', views.services_settings, name='services_settings'),
+
+
+    #Booking
+    url(r'^booking/$', views.book_now, name='book_now'),
+    url(r'^booking/(?P<id>[-\w]+)/$', views.book_now, name='book_now'),
+    url(r'^slots/$', views.get_time_slots, name='get_time_slots'),
+   )

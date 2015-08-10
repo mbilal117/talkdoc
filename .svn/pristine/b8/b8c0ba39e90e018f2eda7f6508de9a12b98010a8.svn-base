@@ -1,0 +1,113 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+    <div class="wrapper">
+        <div class="content-6">
+            <form enctype="multipart/form-data" id="booking" action="{% url 'book_now' profile_obj.id%}" method="post" >{% csrf_token %}
+                <div class="app_review">
+                    {% if profile_obj.picture%}
+                        <img src="{{ STATIC_ROOT }}{{profile_obj.picture.url}}" width="100" height="104"/>
+                    {% else %}
+                        <img src="/static/css/images/pic.png"/>
+                    {% endif %}
+                    <div class="review_detail_8">
+                        <h3>Dr. {{profile_obj.first_name}} {{profile_obj.last_name}}</h3>
+                        <p>MBBS , MS - Orthopaedics , MCh Orth(UK) , Fellow (USA)</p>
+                        <p>Orthopedist , Spine and Pain Specialist , 17 Years Experience</p>
+                    </div>
+                </div>
+                <div class="cal_nav">
+                    <div class="wrapper">
+                        <span>Agenda</span>
+                        <ul>
+                            <li><a href="#">day</a></li>
+                            <li><a href="#">month</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="reason_visit">
+                    <label>Reason For Visit</label>
+                    <select id="visitType" name="visitType">
+                        <option value="" selected="selected">-----------------</option>
+                        {% for x in visit_types %}
+                            <option value="{{x.id}}">{{x}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="pat_appointment container pat_review">
+                    <div class="responsive-calendar pat_calendar">
+                        <div class="controls">
+                            <a class="pull-left" data-go="prev"><div class="btn btn-primary">Prev</div></a>
+                            <h4><span data-head-year></span> <span data-head-month></span></h4>
+                            <a class="pull-right" data-go="next"><div class="btn btn-primary">Next</div></a>
+                        </div><hr/>
+                        <div class="day-headers">
+                                <div class="day header">Mon</div>
+                                <div class="day header">Tue</div>
+                                <div class="day header">Wed</div>
+                                <div class="day header">Thu</div>
+                                <div class="day header">Fri</div>
+                                <div class="day header">Sat</div>
+                                <div class="day header">Sun</div>
+                        </div>
+                        <div class="days" data-group="days">
+                        </div>
+                    </div>
+                    <div class="appointment_details">
+                        <div class="up-appoint">
+                            <input type=hidden id="docId" value={{profile_obj.id}}>
+                            <input type=hidden id="selected_date" name="selected_date" value=''>
+                            <select name="availableslots" id="availableslots" MULTIPLE>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="reason_visit">
+                    <button type="submit" class="btn btn-default confirm_appointment">Confirm Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_body %}
+<script>
+		$(document).ready(function(){
+
+		    $('#myTable').dataTable();
+		    $(".responsive-calendar").responsiveCalendar({
+				onDayClick: function(events) {
+					var key = $(this).data('year')+'-'+addLeadingZero( $(this).data('month') )+'-'+addLeadingZero( $(this).data('day') );
+					$('#selected_date').val(key);
+					$.ajax({
+                            url : "{% url 'get_time_slots' %}",
+                        type : "POST",
+                        data :{
+                                selected_date:key,
+                                doc_id: $('#docId').val(),
+                                visitType: $('#visitType').val()
+                        },
+                        success : function( response ){
+                        if(response['slots'].length > 0)
+                            $('#availableslots').find('option').remove();
+                            $.each(response['slots'], function (i, item) {
+                                $('#availableslots').append($('<option>', {
+                                    value: item,
+                                    text : item
+                                }));
+                            });
+                        }
+                    });
+
+				}
+			});
+
+		    function addLeadingZero(num) {
+				if (num < 10) {
+				  return "0" + num;
+				} else {
+				  return "" + num;
+				}
+			}
+		});
+</script>
+{% endblock %}

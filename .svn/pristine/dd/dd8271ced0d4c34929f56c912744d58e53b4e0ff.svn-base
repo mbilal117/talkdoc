@@ -1,0 +1,74 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<form enctype="multipart/form-data" id="main_search" action="{% url 'main_search' %}" method="get" >
+    <input style="width: 150px" type="text" id="user_name" name="user_name" placeholder="Find Doc">
+    <button class="btn add-on" id="searchbar-button" />Search</button>
+</form>
+{% if featured_ips %}
+<div id="slider2">
+    <a class="buttons prev" href="#">&#60;</a>
+    <div class="viewport">
+        <ul class="overview">
+    {% for obj in featured_ips %}
+		<div class="pcb-template">
+			<div class="pcb-container">
+               {% if obj.ip.ip_image %}
+			        <a href="{% url ip_description obj.ip.id %}"><img src="{{ MEDIA_URL }}{{obj.ip.ip_image}}" width="109" height="103" /></a>
+			    {% else %}
+                    <a href="{% url ip_description obj.ip.id %}"><img src="/static/img/generic/chips.png" width="109" height="103" /></a>
+                {% endif %}
+				<div class="" >
+					<span class="pcb-text" >
+                        <a href="{% url ip_description obj.ip.id %}">{{ obj.ip.name }}</a> - {% if obj.ip.description %}{{ obj.ip.description|slice:"30" }}...{% else %}No Description Provided{% endif %}<br />
+                        {{ obj.ip.owner }} - {{ obj.ip.release_date|date }}
+					</span>
+					<ul class="">
+                        <a href="{% url ip_description obj.ip.id %}" name="more"><li class="bars" id="description_{{ obj.ip.id}}" rel="bars_tooltip" title="Description"></li></a>
+
+                    {% if obj.like %}
+                        <li class="like-grayed" id="like_{{ obj.ip.id }}" rel="liked_tooltip" title="Like"></li>
+                    {% else %}
+                    <a href="javascript:void(0);" name="like" id="ref_like_{{ obj.ip.id }}"><li class="like" id="like_{{ obj.ip.id }}" rel="like_tooltip" title="Like"></li></a>
+                    {% endif %}
+                    <a href="{% url file_download  obj.ip.id %}" name="download"><li class="download" id="download_{{ obj.ip.id }}" rel="download_tooltip" title="Download"></li></a>
+                    {% if obj.session %}
+                        <a href="javascript:void(0);" name="cart"><li class="cart-grayed" id="cart_remove_{{ obj.ip.id }}" rel="cart_tooltip" title="Cart"></li></a>
+                    {% else %}
+                        <a href="javascript:void(0);" name="cart"><li class="cart" id="cart_add_{{ obj.ip.id }}" rel="cart_tooltip" title="Cart"></li></a>
+                    {% endif %}
+                        <a href="javascript:void(0);" name="comment" id="ipcomment_{{ obj.ip.id }}" class="uploadBtn"><li class="comment" rel="comment_tooltip" title="Comment"></li></a>
+                        <a href="{%url add_wishlist obj.ip.id %}" name="wish"><li class="wishlist" id="wishlist_{{ obj.ip.id}}" rel="bars_tooltip" title="Favorite IPs"></li></a>
+                        <div style="clear:both;"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        </ul>
+    </div>
+    <a class="buttons next" href="#">&#62;</a>
+</div>
+{% else%}
+<p class="lead"><small>No IP's to display<small></p>
+{% endif %}
+{% endblock %}
+{% block extra_body %}
+<script type="text/javascript">
+  $(function() {
+        var myDjangoList = (("{{user_list}}").replace(/&(l|g|quo)t;/g, function(a,b){
+                    return {
+                        l   : '<',
+                        g   : '>',
+                        quo : '"'
+                    }[b];
+                }));
+        myDjangoList = myDjangoList.replace(/u'/g, '\'');
+        myDjangoList = myDjangoList.replace(/'/g, '\"');
+
+        myData = JSON.parse( myDjangoList );
+        $( "#user_name" ).autocomplete({
+        source: myData
+        });
+  });
+</script>
+{% endblock %}

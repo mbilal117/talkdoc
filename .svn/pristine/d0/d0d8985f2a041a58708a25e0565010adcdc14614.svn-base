@@ -1,0 +1,42 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<div class="nav-three">
+        <ul>
+            <li class="nav_arrow">
+                <a href="{%url 'availability_settings'%}">Dashboard</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+            </li>
+            <li class="nav_arrow selected">
+                <a href="javascript:void(0);" >My Services</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+            </li>
+        </ul>
+    </div>
+<section class="content" style="margin-top: 70px;">
+     <div class="table-responsive visible-xs-*">
+        <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+            <tbody>
+            {% for x in services_list %}
+            <form id="form{{forloop.counter}}" method="post" action="{% url 'services_settings' x.id %}" enctype="multipart/form-data">{% csrf_token %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{x.service}}<input type="hidden" value="{{x.id}}" name="serviceId"></td>
+                    <td>{{x.start_time}}</td>
+                    <td>
+                        <select class="form-control" id="id_duration" name="duration" onchange="this.form.submit()">
+                            <option value="" selected="selected">---------</option>
+                            {%ifequal x.duration '1' %}<option value="1" selected>15</option>{% else%}<option value="1" >15</option>{% endifequal %}
+                            {%ifequal x.duration '2' %}<option value="2" selected>30</option>{% else%}<option value="2" >30</option>{% endifequal %}
+                            {%ifequal x.duration '3' %}<option value="3" selected>45</option>{% else%}<option value="3" >45</option>{% endifequal %}
+                            {%ifequal x.duration '4' %}<option value="4" selected>60</option>{% else%}<option value="4" >60</option>{% endifequal %}
+                        </select>
+                        {{form.duration.errors}}
+                    </td>
+                </tr>
+            </form>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+

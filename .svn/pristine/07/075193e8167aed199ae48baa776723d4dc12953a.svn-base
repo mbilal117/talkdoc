@@ -1,0 +1,28 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+    {% if user_profile.profile_step == '1'%}
+        {% include "talkdoc/personalInformation.html" %}
+    {% endif %}
+    {% if user_profile.profile_step == '2' %}
+        {% include "talkdoc/educationalInformation.html" %}
+    {% endif %}
+    {% if user_profile.profile_step == '3' %}
+        {% include "talkdoc/professionalInformation.html" %}
+    {% endif %}
+    {% if user_profile.profile_step == '4' %}
+        {% include "talkdoc/specialityServices.html" %}
+    {% endif %}
+{% endblock %}
+{% block extra_body %}
+<script type="text/javascript">
+$( document ).ready(function() {
+<!--$('form').find('input[type=text], textarea').val('');-->
+<!--$('form').find('input[type=email], textarea').val('');-->
+});
+    $(function() {
+        $('#datetimepicker1').datetimepicker({
+            pickTime: false
+        });
+      });
+</script>
+{% endblock %}

@@ -1,0 +1,120 @@
+from django.db import models
+from django.contrib.auth.models import User
+
+from base.models import TimeStampAwareModel
+
+# User Type
+class UserType(TimeStampAwareModel):
+    user_type = models.CharField(max_length=100)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.user_type
+
+
+#Speciality
+class Speciality(models.Model):
+    speciality_name = models.CharField(max_length=50)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.speciality_name
+
+#Service Offered
+class ServiceOffered(models.Model):
+    service_name = models.CharField(max_length=50)
+    date_created = models.DateTimeField(auto_now_add=True)
+    speciality = models.ForeignKey(Speciality)
+
+    def __unicode__(self):
+        return self.service_name
+
+#City
+class City(models.Model):
+    city_name = models.CharField(max_length=50)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.city_name
+
+
+#User Profile
+class UserProfile(TimeStampAwareModel):
+    SEX = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    )
+
+    BLOOD_GROUP = (
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+    )
+
+    MARITAL_STATUS = (
+        ('Single', 'Single'),
+        ('Married', 'Married'),
+    )
+
+    first_name = models.CharField(max_length=50, default='')
+    last_name = models.CharField(max_length=50, default='')
+    cell_phone = models.CharField(max_length=13, default='')
+    user = models.ForeignKey(User, null=True, blank=True)
+    dob = models.DateTimeField(null=True, blank=True)
+    sex = models.CharField(max_length=10, choices=SEX)
+    medical_condition = models.CharField(max_length=100, null=True, blank=True)
+    alergy = models.CharField(max_length=50, null=True, blank=True)
+    picture = models.FileField(max_length=200, upload_to="TalkDoc/Files", null=True, blank=True, default="")
+    blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP)
+    marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS)
+    city = models.ForeignKey(City)
+    address = models.CharField(max_length=100, null=True, blank=True)
+    education = models.CharField(max_length=50, null=True, blank=True)
+    speciality = models.ForeignKey(Speciality, null=True, blank=True)
+    services_offerd = models.ManyToManyField(ServiceOffered, blank=True)
+    date_created = models.DateTimeField(auto_now_add = True)
+    date_updated = models.DateTimeField(auto_now = True)
+
+
+    def __unicode__(self):
+        return "%s-%s" % (self.first_name, self.last_name)
+
+
+#Availability
+class Availability(TimeStampAwareModel):
+    WEEK_DAYS = (
+        ('1', 'Sunday'),
+        ('2', 'Monday'),
+        ('3', 'Tuesday'),
+        ('4', 'Wednesday'),
+        ('5', 'Thursday'),
+        ('6', 'Friday'),
+        ('7', 'Saturday'),
+    )
+
+    DURATION = (
+        ('1', '15'),
+        ('2', '30'),
+        ('3', '45'),
+        ('4', '60'),
+    )
+
+    profile = models.ForeignKey(UserProfile)
+    service = models.ForeignKey(ServiceOffered)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    day = models.CharField(max_length=10, choices=WEEK_DAYS)
+    duration = models.CharField(max_length=10, choices=DURATION)
+    is_repeat = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.service
+

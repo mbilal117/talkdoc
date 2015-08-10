@@ -1,0 +1,133 @@
+<section class="content">
+    <div class="row">
+        <!-- /.col 3 end -->
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <h3>Speciality & Services</h3>
+            </div>
+            <div class="col-md-2" style="float:right;margin-top: 20px;">
+                {% ifequal user.user_type.user_type "Doctor" %}
+                <h4>Step: 4 out of 4</h4>
+                {%endifequal%}
+            </div>
+            <br/><br/>
+            <hr/>
+            <div class="table-responsive visible-xs-*">
+                <form id="form" method="post" action="{% url 'add_speciality_services' profile_obj.id%}" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="col-md-6">
+                        <label>Speciality</label>
+                        <select class="form-control" id="speciality" name="speciality">
+                            <option value="0">------------</option>
+                            {% for speciality in speciality_list%}
+                                {% if speciality == profile_obj.speciality %}
+                                <option value="{{speciality.id}}" selected>{{speciality}}</option>
+                                {% else %}
+                                <option value="{{speciality.id}}">{{speciality}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Services</label>
+                        <select class="form-control" id="services" name="services" multiple>
+                            {% for s in services_list%}
+                                {%if s in profile_obj.services_offerd.all %}
+                                    <option value="{{s.id}}" selected>{{s}}</option>
+                                {% else %}
+                                    <option value="{{s.id}}">{{s}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <br/>
+                        <button class="btn btn-primary" style="float:right;">Save</button>
+                    </div>
+                </form>
+            </div>
+            <hr/>
+            <h4>Practice Location
+                {% if practice_location_list|length == 0%}
+                <a href="{% url 'add_location_item' profile_obj.id %}"><i class="glyphicon glyphicon-plus-sign" title="Add New"></i></a>
+                {% endif %}
+            </h4>
+            <div class="table-responsive visible-xs-*">
+                <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+                    <thead>
+                        <th>ID</th>
+                        <th class="col-md-2">Location</th>
+                        <th>Flat/Plot number</th>
+                        <th>Street Number</th>
+                        <th class="col-md-2">Area</th>
+                        <th class="col-md-2">Country</th>
+                        <th class="col-md-2">City</th>
+                        <th class="col-md-2">Hospital</th>
+                        <th class="col-md-1"></th>
+                    </thead>
+                    <tbody>
+                    {% for x in practice_location_list %}
+                        <form id="practiceForm{{forloop.counter}}" method="post" action="{% url 'submit_location_item' x.id %}" >{% csrf_token %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><input type="text" class="form-control" name="location" placeholder="Enter" value="{% if x.location %}{{x.location}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="flatplotnumber" placeholder="Enter" value="{% if x.flat_plot_number %}{{x.flat_plot_number}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="streetnumber" placeholder="Enter" value="{% if x.street_number %}{{x.street_number}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="area" placeholder="Enter" value="{% if x.area %}{{x.area}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="country" placeholder="Enter" value="{% if x.country %}{{x.country}}{% endif %}"></td>
+                            <td><select name="city" class="form-control">
+                                <option>------------</option>
+                                {% for c in city_list%}
+                                    {% if c == x.city%}
+                                    <option value="{{c.id}}" selected>{{c}}</option>
+                                    {%else%}
+                                    <option value="{{c.id}}">{{c}}</option>
+                                    {%endif%}
+                                {% endfor %}
+                                </select></td>
+                            <td><select name="hospital" class="form-control">
+                                <option>------------</option>
+                                {% for c in hospital_list%}
+                                    {% if c == x.hospital%}
+                                    <option value="{{c.id}}" selected>{{c}}</option>
+                                    {%else%}
+                                    <option value="{{c.id}}">{{c}}</option>
+                                    {%endif%}
+                                {% endfor %}
+                                </select></td>
+                            <td>
+                                <a href="#" onclick="document.getElementById('practiceForm{{forloop.counter}}').submit();"><i class="glyphicon glyphicon-edit" TITLE="Save"></i></a>&nbsp;
+                                <a href="{% url 'delete_location_item' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+            <div class="col-md-2" style="float:right;">
+                <a href="{% url 'show_next_step' profile_obj.id 2 %}" class="btn btn-primary"> Previous</a>&nbsp;
+                <a href="{% url 'show_next_step' profile_obj.id 4 %}" class="btn btn-primary">Next</a>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $("#speciality").change(function() {
+        $.ajax({
+            url : "{% url 'get_services_by_speciality' %}",
+            type : "POST",
+            data :{
+                    selected_id:$(this).val(),
+            },
+            success : function( response ){
+            if(response['service_list'].length > 0)
+                $('#services').find('option').remove();
+                $.each(response['service_list'], function (i, item) {
+                    $('#services').append($('<option>', {
+                        value: item.key,
+                        text : item.value
+                    }));
+                });
+            }
+        });
+    });
+</script>

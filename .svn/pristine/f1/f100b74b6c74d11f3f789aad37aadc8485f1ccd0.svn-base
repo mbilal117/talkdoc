@@ -1,0 +1,39 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<div class="wrapper">
+<div class="content-6">
+	  <div class="border-right">
+	 <div class="pat_appointment container pat_review">
+			 <div class="prof-complete">
+			 <div class="prof_left_cont">
+			 <h1>Welcome, {{user.user.first_name}}!</h1>
+			 <p>Click below to find a doctor and make an appointment instantly. It’s completely free!</p>
+			 <a href="{% url 'search_results' %}" class="btn btn-default edit_profile">Find a Doctor</a>
+			 </div>
+			 <div class="prof_right_cont">
+			 <img src="/static/css/images/dr_pic.png"/>
+			 </div>
+			 </div>
+  		</div>
+		 <div class="book_physician">
+                                            <div class="row_physician">
+                                                <img src="/static/css/images/dr_img.png"/>
+												<h3>Book a Primary Care Physician</h3>
+												<p>Want to see a skin care specialist? Click here to make an appointment.</p>
+												<button type="button" class="btn btn-default search-btn">Search</button>
+                                            </div>
+                                            <div class="row_physician">
+											 <img src="/static/css/images/dr_img.png"/>
+											 <h3>Book a Primary Care Physician</h3>
+											 <p>Want to see a skin care specialist? Click here to make an appointment.</p>
+											 <button type="button" class="btn btn-default search-btn">Search</button>
+											 </div>
+                                        </div>
+
+	  </div>
+	  <div class="prof_completeness">
+	  <img src="/static/css/images/profile.png"/>
+	  </div>
+	  </div>
+	</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+<section class="content">
+    <div class="row">
+        <!-- /.col 3 end -->
+        <div class="col-md-12">
+            <h3>Educational Information
+            <a href="{% url 'add_education_item' user_profile.id %}"><i class="glyphicon glyphicon-plus-sign" title="Add New"></i></a>
+            </h3>
+            <hr/>
+            <div class="table-responsive visible-xs-*">
+                <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+                    <thead>
+                        <th class="col-md-1">ID</th>
+                        <th class="col-md-2">Degree</th>
+                        <th class="col-md-2">From</th>
+                        <th class="col-md-2">To</th>
+                        <th class="col-md-2">Grade</th>
+                        <th class="col-md-2">Institute/Board</th>
+                        <th class="col-md-1"></th>
+                    </thead>
+                    <tbody>
+                    {% for x in education_list %}
+                        <form id="educationForm{{forloop.counter}}" method="post" action="{% url 'submit_education_item' x.id %}" >{% csrf_token %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><input type="text" class="form-control" name="degree" placeholder="Enter" value="{% if x.degree %}{{x.degree}}{% endif %}"></td>
+                            <td>
+                                <div>
+                                    <div id="start{{forloop.counter}}" class="input-append date">
+                                        <input type="text" data-format="MM/dd/yyyy" class="form-control" name="start" placeholder="Enter" value="{% if x.start_date %}{{x.start_date|date:'m/d/Y'}}{% endif %}">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                <img style="margin: -31px -148px; float: right;" src="/static/css/images/dob.png"/>
+                                            </i>
+                                        </span>
+                                    </div>
+                                    <script>
+                                        $('#start{{forloop.counter}}').datetimepicker({
+                                            pickTime: false
+                                        });
+                                    </script>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div id="end{{forloop.counter}}" class="input-append date">
+                                        <input type="text" data-format="MM/dd/yyyy" class="form-control" name="end" placeholder="Enter" value="{% if x.end_date %}{{x.end_date|date:'m/d/Y'}}{% endif %}">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                <img style="margin: -31px -148px; float: right;" src="/static/css/images/dob.png"/>
+                                            </i>
+                                        </span>
+                                    </div>
+                                    <script>
+                                        $('#end{{forloop.counter}}').datetimepicker({
+                                            pickTime: false
+                                        });
+                                    </script>
+                                </div>
+                            </td>
+                            <td><input type="text" class="form-control" name="institute" placeholder="Enter" value="{% if x.institute_board %}{{x.institute_board}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="grade" placeholder="Enter" value="{% if x.grade %}{{x.grade}}{% endif %}"></td>
+                            <td>
+                                <a href="#" onclick="document.getElementById('educationForm{{forloop.counter}}').submit();"><i class="glyphicon glyphicon-edit" TITLE="Save"></i></a>&nbsp;
+                                <a href="{% url 'delete_education_item' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+            <div class="col-md-2" style="float:right;">
+                <a href="{% url 'show_next_step' user_profile.id 1 %}" class="btn btn-primary"> Previous</a>&nbsp;
+                <a href="{% url 'show_next_step' user_profile.id 3 %}" class="btn btn-primary">Next</a>
+            </div>
+        </div>
+    </div>
+</section>

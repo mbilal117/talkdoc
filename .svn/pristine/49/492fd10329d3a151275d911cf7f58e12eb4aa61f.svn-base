@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="nav-two">
+        <ul>
+            <li><span class="glyphicon glyphicon-user" aria-hidden="true"></span><a href="#">Profile</a></li>
+            <li><i class="fa fa-cog"></i><a href="#">Notifications</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="edit_cont">
+            <button type="button" class="btn btn-default edit_profile">Edit Profile</button>
+        </div>
+    </div>
+{% endblock %}

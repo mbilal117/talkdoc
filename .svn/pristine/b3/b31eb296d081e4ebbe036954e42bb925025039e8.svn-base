@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="col-xs-12 col-sm-6 col-lg-7 login">
+        <img src="/static/css/images/login_img.png"/></a>
+    </div>
+    <div class="col-xs-8 col-sm-6 col-lg-5 login_form">
+        <form method="POST">{% csrf_token %}
+            <h1>Sign up in seconds</h1>
+            <div class="form_in">
+                <div class="form-group">
+                    <div class="left-inner-addon ">
+                        <i class="icon-user"></i>
+                        <input type="text" class="form-control uname_field" name="username" id="username" placeholder="What's your username?" autofocus="autofocus">
+                        {{form.username.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="left-inner-addon ">
+                    <i class="icon-lock"></i>
+                    <input type="password" class="form-control pass_field" id="password" name="password" placeholder="Choose a password">
+                    {{form.password.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="left-inner-addon ">
+                    <i class="icon-lock"></i>
+                    <input type="password" class="form-control pass_field" id="password2" name="password2" placeholder="Confirm password">
+                    {{form.password2.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="left-inner-addon ">
+                    <i class="icon-lock"></i>
+                    <input type="email" class="form-control pass_field" id="email" name="email" placeholder="Enter your email">
+                    {{form.email.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="left-inner-addon ">
+                    <i class="icon-lock"></i>
+                    {{form.user_type}}
+                    {{form.user_type.errors}}
+                </div>
+            </div>
+            {% if form.errors %}
+                <p style="color:#b94a48;font-size:11px;">Sorry, that's not a valid username or password</p>
+            {% endif %}
+            <button type="submit" class="btn btn-default sign-up-btn">Sign me up!</button>
+            <p>..or you can skip that and sign up via</p>
+            <button type="submit" class="btn btn-default f-connect-btn">Connect</button>
+            <button type="submit" class="btn btn-default t-connect-btn">Connect</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+

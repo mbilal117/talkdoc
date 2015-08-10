@@ -1,0 +1,73 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<section class="content" style="margin-top: 10px;">
+    <div class="table-responsive visible-xs-*">
+        <form id="form" method="post" action="{% url 'availability_settings' %}" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <!-- /.col 3 end -->
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Service</label>
+                        <select class="form-control" id="id_service" name="service">
+                             <option value="" selected="selected">---------</option>
+                        {% for x in profile_obj.services_offerd.all %}
+                            <option value="{{x.id}}">{{x}}</option>
+                        {% endfor %}
+                        </select>
+                        <!--{{form.service}}-->
+                        {{form.service.errors}}
+                        <label>Start Time</label>
+                        {{form.start_time}}
+                        {{form.start_time.errors}}
+                    </div>
+                    <div class="col-md-4">
+                        <label>Day</label>
+                        {{form.day}}
+                        {{form.day.errors}}
+                        <label>End Time</label>
+                        {{form.end_time}}
+                        {{form.end_time.errors}}
+                    </div>
+                    <div class="col-md-4">
+                        <label>Duration</label>
+                        {{form.duration}}
+                        {{form.duration.errors}}
+                        <div class="col-md-11" style="text-align:right;">
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br/>
+     <div class="table-responsive visible-xs-*">
+        <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+            <thead>
+                <th class="col-md-2">Service</th>
+                <th class="col-md-2">Day</th>
+                <th class="col-md-2">Duration</th>
+                <th class="col-md-2">Start Time</th>
+                <th class="col-md-2">End Time</th>
+                <th class="col-md-1"></th>
+            </thead>
+            <tbody>
+            {% for x in availability_list %}
+                <tr>
+                    <td>{{x.service}}</td>
+                    <td>{{x.get_day_display}}</td>
+                    <td>{{x.get_duration_display}}</td>
+                    <td>{{x.start_time}}</td>
+                    <td>{{x.end_time}}</td>
+                    <td>
+                        <a href="#"><i class="glyphicon glyphicon-edit" TITLE="Edit"></i></a>&nbsp;
+                        <a href="#"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,150 @@
+<section class="content">
+    <div class="row">
+        <!-- /.col 3 end -->
+        <div class="col-md-12">
+            <h3>Professional Information</h3>
+            <hr/>
+            <h4>Awards & Recognitions
+                <a href="{% url 'add_award_item' profile_obj.id %}"><i class="glyphicon glyphicon-plus-sign" title="Add New"></i></a>
+            </h4>
+            <div class="table-responsive visible-xs-*">
+                <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+                    <thead>
+                        <th class="col-md-1">ID</th>
+                        <th class="col-md-2">Awards & Recognitions</th>
+                        <th class="col-md-2">Year of Award</th>
+                        <th class="col-md-2">Awarding Institute</th>
+                        <th class="col-md-1"></th>
+                    </thead>
+                    <tbody>
+                    {% for x in awards_list %}
+                        <form id="awardForm{{forloop.counter}}" method="post" action="{% url 'submit_award_item' x.id %}" >{% csrf_token %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><input type="text" class="form-control" name="award" placeholder="Enter" value="{% if x.award_recognitions %}{{x.award_recognitions}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="year" placeholder="Enter" value="{% if x.year_of_award %}{{x.year_of_award}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="institute" placeholder="Enter" value="{% if x.awarding_institute %}{{x.awarding_institute}}{% endif %}"></td>
+                            <td>
+                                <a href="#" onclick="document.getElementById('awardForm{{forloop.counter}}').submit();"><i class="glyphicon glyphicon-edit" TITLE="Save"></i></a>&nbsp;
+                                <a href="{% url 'delete_award_item' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <h4>Employment History
+                <a href="{% url 'add_employment_item' profile_obj.id %}"><i class="glyphicon glyphicon-plus-sign" title="Add New"></i></a>
+            </h4>
+            <div class="table-responsive visible-xs-*">
+                <table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+                    <thead>
+                        <th>ID</th>
+                        <th class="col-md-1">Designation</th>
+                        <th class="col-md-2">Employer Name</th>
+                        <th class="col-md-2">Start</th>
+                        <th class="col-md-2">End</th>
+                        <th class="col-md-2">Country</th>
+                        <th class="col-md-2">City</th>
+                        <th class="col-md-1"></th>
+                    </thead>
+                    <tbody>
+                    {% for x in employment_list %}
+                        <form id="employmentForm{{forloop.counter}}" method="post" action="{% url 'submit_employment_item' x.id %}" >{% csrf_token %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><input type="text" class="form-control" name="designation" placeholder="Enter" value="{% if x.designation %}{{x.designation}}{% endif %}"></td>
+                            <td><input type="text" class="form-control" name="employer" placeholder="Enter" value="{% if x.employer_name %}{{x.employer_name}}{% endif %}"></td>
+                            <td>
+                                <div>
+                                    <div id="start{{forloop.counter}}" class="input-append date">
+                                        <input type="text" data-format="MM/dd/yyyy" class="form-control" name="start" placeholder="Enter" value="{% if x.start_date %}{{x.start_date|date:'m/d/Y'}}{% endif %}">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                <img style="margin: -31px -142px; float: right;" src="/static/css/images/dob.png"/>
+                                            </i>
+                                        </span>
+                                    </div>
+                                    <script>
+                                        $('#start{{forloop.counter}}').datetimepicker({
+                                            pickTime: false
+                                        });
+                                    </script>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div id="end{{forloop.counter}}" class="input-append date">
+                                        <input type="text" data-format="MM/dd/yyyy" class="form-control" name="end" placeholder="Enter" value="{% if x.end_date %}{{x.end_date|date:'m/d/Y'}}{% endif %}">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                <img style="margin: -31px -142px; float: right;" src="/static/css/images/dob.png"/>
+                                            </i>
+                                        </span>
+                                    </div>
+                                    <script>
+                                        $('#end{{forloop.counter}}').datetimepicker({
+                                            pickTime: false
+                                        });
+                                    </script>
+                                </div>
+                            </td>
+                            <td><input type="text" class="form-control" name="country" placeholder="Enter" value="{% if x.country %}{{x.country}}{% endif %}"></td>
+                            <td><select name="city" class="form-control">
+                                <option>------------</option>
+                                {% for c in city_list%}
+                                    {% if c == x.city%}
+                                    <option value="{{c.id}}" selected>{{c}}</option>
+                                    {%else%}
+                                    <option value="{{c.id}}">{{c}}</option>
+                                    {%endif%}
+                                {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" onclick="document.getElementById('employmentForm{{forloop.counter}}').submit();"><i class="glyphicon glyphicon-edit" TITLE="Save"></i></a>&nbsp;
+                                <a href="{% url 'delete_employment_item' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <h4>Memberships and Professional Affiliations
+                <a href="{% url 'add_membership_item' profile_obj.id %}"><i class="glyphicon glyphicon-plus-sign" title="Add New"></i></a>
+            </h4>
+            <div class="table-responsive visible-xs-*">
+                <table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+                    <thead>
+                        <th class="col-md-1">ID</th>
+                        <th class="col-md-4">Membership</th>
+                        <th class="col-md-1"></th>
+                    </thead>
+                    <tbody>
+                    {% for x in membership_list %}
+                        <form id="membershipForm{{forloop.counter}}" method="post" action="{% url 'submit_membership_item' x.id %}" >{% csrf_token %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><input type="text" class="form-control" name="membership" placeholder="Enter" value="{% if x.membership %}{{x.membership}}{% endif %}"></td>
+                            <td>
+                                <a href="#" onclick="document.getElementById('membershipForm{{forloop.counter}}').submit();"><i class="glyphicon glyphicon-edit" TITLE="Save"></i></a>&nbsp;
+                                <a href="{% url 'delete_membership_item' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+            <div class="col-md-2" style="float:right;">
+                <a href="{% url 'show_next_step' profile_obj.id 2 %}" class="btn btn-primary"> Previous</a>&nbsp;
+                <a href="{% url 'show_next_step' profile_obj.id 4 %}" class="btn btn-primary">Next</a>
+            </div>
+        </div>
+    </div>
+</section>

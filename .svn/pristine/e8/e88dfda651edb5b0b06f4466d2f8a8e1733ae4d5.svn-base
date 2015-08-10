@@ -1,0 +1,135 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<div class="wrapper">
+<div class="content-6">
+	<div class="border-right">
+		<div class="pat_appointment container pat_review">
+			 <div class="prof-complete">
+			 <div class="prof_left_cont">
+			 <h1>Welcome, {{user.user.first_name}}!</h1>
+			 <p>Click below to find a doctor and make an appointment instantly. It’s completely free!</p>
+			 <a href="{% url 'main_search' 'Doctor' %}" class="btn btn-default edit_profile">Find a Doctor</a>
+			 </div>
+			 <div class="prof_right_cont">
+			 <img src="/static/css/images/dr_pic.png"/>
+			 </div>
+			 </div>
+  		</div>
+		<div class="book_physician">
+			<div class="row_physician">
+				<img src="/static/css/images/dr_img.png"/>
+				<h3>Book a Primary Care Physician</h3>
+				<p>Want to see a skin care specialist? Click here to make an appointment.</p>
+				<button type="button" class="btn btn-default search-btn">Search</button>
+			</div>
+			<div class="row_physician">
+				 <img src="/static/css/images/dr_img.png"/>
+				 <h3>Book a Primary Care Physician</h3>
+				 <p>Want to see a skin care specialist? Click here to make an appointment.</p>
+				 <button type="button" class="btn btn-default search-btn">Search</button>
+			</div>
+		</div>
+	  </div>
+	  <div class="prof_completeness">
+	  <h3>Wellness Guide</h3>
+	  <h2><b>1</b>of<b>5</b></h2>
+        <section>
+            <div class="row">
+                <div class="pie_progress--slow" role="progressbar">
+                    <span class="pie_progress__number">0%</span>
+                </div>
+				</div>
+				<div class="prof_row">
+				<img src="/static/css/images/tick.png"/>
+				<p>Visual Exam</p>
+				<a href="#"><img src="/static/css/images/arrow.png"/></a>
+				</div>
+				<div class="prof_row">
+				<img src="/static/css/images/tick.png"/>
+				<p>Skin Screening</p>
+				<a href="#"><img src="/static/css/images/arrow.png"/></a>
+				</div>
+				<div class="prof_row">
+				<img src="/static/css/images/tick.png"/>
+				<p>Annual Physical</p>
+				<a href="#"><img src="/static/css/images/arrow.png"/></a>
+				</div>
+				<div class="prof_row">
+				<img src="/static/css/images/tick.png"/>
+				<p>Dental Exam</p>
+				<a href="#"><img src="/static/css/images/arrow.png"/></a>
+				</div>
+				<div class="prof_row" style="color:#bcbcbc !important;">
+				<img src="/static/css/images/tick_done.png"/>
+				<p><strike>Sign-up at TalkDoc</strike></p>
+				<a href="#"><img src="/static/css/images/arrow.png"/></a>
+				</div>
+                <div class="btns">
+                    <button id="button_start">start()</button>
+                    <button id="button_stop">stop()</button>
+                    <button id="button_go">go('50')</button>
+                    <button id="button_go_percentage">go('50%')</button>
+                    <button id="button_finish">finish()</button>
+                    <button id="button_reset">reset()</button>
+                </div>
+
+        </section>
+	  </div>
+	  </div>
+	</div>
+{% endblock %}
+{% block extra_body %}
+<script type="text/javascript">
+    jQuery(document).ready(function($){
+        $('.pie_progress').asPieProgress({
+            namespace: 'pie_progress'
+        });
+
+        // Example with grater loading time - loads longer
+        $('.pie_progress--slow').asPieProgress({
+            namespace: 'pie_progress',
+            goal: 1000,
+            min: 0,
+            max: 1000,
+            speed: 200,
+            easing: 'linear'
+        });
+
+        // Example with grater loading time - loads longer
+        $('.pie_progress--countdown').asPieProgress({
+            namespace: 'pie_progress',
+            easing: 'linear',
+            first: 120,
+            max: 120,
+            goal: 0,
+            speed: 1200, // 120 s * 1000 ms per s / 100
+            numberCallback: function(n){
+                var minutes = Math.floor(this.now/60);
+                var seconds = this.now % 60;
+                if(seconds < 10) {
+                    seconds = '0' + seconds;
+                }
+                return minutes + ': ' + seconds;
+            }
+        });
+        $('#button_start').on('click', function(){
+            $('.pie_progress').asPieProgress('start');
+        });
+        $('#button_finish').on('click', function(){
+             $('.pie_progress').asPieProgress('finish');
+        });
+        $('#button_go').on('click', function(){
+             $('.pie_progress').asPieProgress('go',50);
+        });
+        $('#button_go_percentage').on('click', function(){
+            $('.pie_progress').asPieProgress('go','50%');
+        });
+        $('#button_stop').on('click', function(){
+            $('.pie_progress').asPieProgress('stop');
+        });
+        $('#button_reset').on('click', function(){
+            $('.pie_progress').asPieProgress('reset');
+        });
+    });
+    </script>
+{% endblock %}

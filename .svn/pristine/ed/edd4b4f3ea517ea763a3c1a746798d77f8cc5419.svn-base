@@ -1,0 +1,13 @@
+from django.conf.urls import url, patterns
+
+from . import views
+
+urlpatterns = patterns('TalkDoc.views',
+    url(r'^home/$', views.home, name='home'),
+    url(r'^editProfile/$', views.edit_profile, name='edit_profile'),
+    url(r'^user_profile/$', views.user_profile, name='user_profile'),
+    url(r'^searchResults/$', views.search_results, name='search_results'),
+    url(r'^search/$', views.main_search, name='main_search'),
+    url(r'^appointments_reviews/$', views.appointments_reviews, name='appointments_reviews'),
+    url(r'^settings/$', views.availability_settings, name='availability_settings')
+   )

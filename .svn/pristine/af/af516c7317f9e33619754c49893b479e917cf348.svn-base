@@ -1,0 +1,119 @@
+{% extends "talkdoc/base.html" %}
+{% block content %}
+<div class="nav-three">
+        <ul>
+            <li class="nav_arrow selected">
+                <a href="javascript:void(0);" class="availability_Settings selected">Dashboard</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+            </li>
+            <li class="nav_arrow">
+                <a href="{%url 'services_settings'%}" class="service_settings">My Services</a><div id="arrow1" style="display:none;"><img src="/static/css/images/down-arrow1.png"></div>
+            </li>
+        </ul>
+    </div>
+<section class="content" style="margin-top: 10px;">
+    <div class="table-responsive visible-xs-*">
+        <form id="form" method="post" action="{% url 'availability_settings' avail_id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- /.col 3 end -->
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Start Date</label>
+                        <div id="start_date" class="input-append date">
+                            <input data-format="MM/dd/yyyy" value="{{form.start_date.value|date:'m/d/Y'}}" class="form-control pass_field" id="id_start_date" name="start_date" type="text">
+
+                            </input>
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                    <img style="margin: -33px -304px; float: right;" src="/static/css/images/dob.png"/>
+                                </i>
+                            </span>
+                        </div>
+
+                        {{form.start_date.errors}}
+                        <label>Start Time</label>
+                            <div id="start_time" class="input-append data">
+                                <input data-format="hh:mm:ss" value="{{form.start_time.value}}" class="form-control pass_field" id="id_start_time" name="start_time" type="text"></input>
+                                <span class="add-on">
+                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                        <img style="margin: -27px -28px; float: right;" src="/static/css/images/time.png"/>
+                                    </i>
+                                </span>
+                            </div>
+                        <!--{{form.start_time}}-->
+                        {{form.start_time.errors}}
+                        <br/>
+                        {{form.is_saturday_off}}
+                        {{form.is_saturday_off.errors}}
+                        I am off on Saturday
+                        <br/>
+                        {{form.is_sunday_off}}
+                        {{form.is_sunday_off.errors}}
+                        I am off on Sunday
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <label>End Date</label>
+                        <div id="end_date" class="input-append date">
+                            <input data-format="MM/dd/yyyy" value="{{form.end_date.value|date:'m/d/Y'}}" class="form-control pass_field" id="id_end_date" name="end_date" type="text"></input>
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                    <img style="margin: -33px -304px; float: right;" src="/static/css/images/dob.png"/>
+                                </i>
+                            </span>
+                        </div>
+                        <!--{{form.end_date}}-->
+                        {{form.end_date.errors}}
+                        <label>End Time</label>
+                            <div id="end_time" class="input-append data">
+                                <input data-format="hh:mm:ss" value="{{form.end_time.value}}" class="form-control pass_field" id="id_end_time" name="end_time" type="text"></input>
+                                <span class="add-on">
+                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                        <img style="margin: -27px -28px; float: right;" src="/static/css/images/time.png"/>
+                                    </i>
+                                </span>
+                            </div>
+                        <!--{{form.end_time}}-->
+                        {{form.end_time.errors}}
+                        <br/>
+                        <button class="btn btn-primary" style="float:right;">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br/>
+     <div class="table-responsive visible-xs-*">
+        <table id="tblchar" class="table table-bordered table-striped table-condensed" style="margin-bottom: 0px;">
+            <thead>
+                <th class="col-md-2">Start Date</th>
+                <th class="col-md-2">End Date</th>
+                <th class="col-md-2">Start Time</th>
+                <th class="col-md-2">End Time</th>
+                <th class="col-md-1"></th>
+            </thead>
+            <tbody>
+            {% for x in availability_list %}
+                <tr>
+                    <td>{{x.start_date}}</td>
+                    <td>{{x.end_date}}</td>
+                    <td>{{x.start_time}}</td>
+                    <td>{{x.end_time}}</td>
+                    <td>
+                        <a href="{% url 'availability_settings' x.id %}"><i class="glyphicon glyphicon-edit" TITLE="Edit"></i></a>&nbsp;
+                        <a href="{% url 'delete_settings' x.id %}"><i class="glyphicon glyphicon-remove-circle" TITLE="Delete"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+<!--$( window ).load(function(){-->
+<!--$('form').find('input[type=text], textarea').val('');-->
+<!--});-->
+<!--});-->
+
+
+
